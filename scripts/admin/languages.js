@@ -1,6 +1,8 @@
-displayLanguages = async () => {
+let serverAdress = '127.0.0.1:4000';
+
+const displayLanguages = async () => {
     console.log('allo');
-    const request = 'http://127.0.0.1:4000/languages';
+    const request = 'http://' + serverAdress + '/languages';
     const response = await fetch(request);
     const languages = await response.json(); //extract JSON from the http response
     console.log('response');
@@ -8,15 +10,11 @@ displayLanguages = async () => {
 
 
     languages.forEach(language => {
-        let node = document.createElement("LI");                 // Create a <li> node
-        let textnode = document.createTextNode(language.name);   // Create a text node
-        node.setAttribute('data-key', language._id);             // Append key attribute to the <li> node 
-        node.appendChild(textnode);                              // Append the text to <li>
-        document.getElementById("langList").appendChild(node);   // Append <li> to <ul> with id="langList" 
+        insertLanguageDOM(language);
     });
 }
 
-insertLanguage = () => {
+const insertLanguageBDD = () => {
     let languageLabel = document.getElementById('languageLabel').value;
     console.log(languageLabel);
     if (languageLabel == '') {
@@ -31,16 +29,17 @@ insertLanguage = () => {
         xhttp.send("name="+ languageLabel);*/
 
 
+        let success = false;
 
-
-
-
-        fetch('http://127.0.0.1:4000/languages', { // the URI
+        fetch('http://' + serverAdress + '/languages', { // the URI
             method: 'POST', // the method
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "name": languageLabel }) // the body
         })
             .then(response => {
+                if(response.ok){
+                    success = true;
+                }
                 // we received the response and print the status code
                 console.log(response.status)
                 // return response body as JSON
@@ -48,9 +47,64 @@ insertLanguage = () => {
             })
             .then(json => {
                 // print the JSON
+                if(success){
+                    insertLanguageDOM(json);
+                }
                 console.log(json)
             })
 
 
     }
+}
+
+const insertLanguageDOM = (language) => {
+    let div = document.createElement('div');
+    div.setAttribute('class', 'languageElement');
+    div.setAttribute('id', language._id);
+
+    let node = document.createElement('LI');                 // Create a <li> node
+    let textnode = document.createTextNode(language.name);   // Create a text node
+    node.setAttribute('data-key', language._id);             // Append key attribute to the <li> node 
+    node.appendChild(textnode);                              // Append the text to <li>
+    div.appendChild(node);                                   // Append <li> to <ul> with id="langList" 
+
+    let delButton = document.createElement('button');
+    let textButton = document.createTextNode('Supprimer');
+    delButton.setAttribute('onclick', 'deleteLanguageBDD(\'' + language._id + '\')');
+    delButton.appendChild(textButton);
+    div.appendChild(delButton);
+    document.getElementById("langList").appendChild(div);
+}
+
+const deleteLanguageBDD = (languageId) => {
+
+    let success = false;
+
+    fetch('http://' + serverAdress + '/languages/' + languageId, { // the URI
+        method: 'DELETE', // the method
+    }).then(response => {
+        if(response.ok){
+            success = true;
+        }
+        // we received the response and print the status code
+        console.log(response.status)
+        // return response body as JSON
+        return response.json()
+    })
+        .then(json => {
+
+            if(success){
+                deleteLanguageDOM('\'' + json._id + '\'');
+            }
+            // print the JSON
+            console.log(json)
+        })
+        
+}
+
+const deleteLanguageDOM = (languageId) => {
+    
+    let element = document.getElementById('\'' + languageId + '\'');
+    console.log(element);
+    //element.remove();
 }
