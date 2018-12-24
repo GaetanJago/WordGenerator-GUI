@@ -94,7 +94,7 @@ const deleteLanguageBDD = (languageId) => {
         .then(json => {
 
             if(success){
-                deleteLanguageDOM('\'' + json._id + '\'');
+                deleteLanguageDOM(json._id);
             }
             // print the JSON
             console.log(json)
@@ -103,8 +103,6 @@ const deleteLanguageBDD = (languageId) => {
 }
 
 const deleteLanguageDOM = (languageId) => {
-    
-    let element = document.getElementById('\'' + languageId + '\'');
-    console.log(element);
-    //element.remove();
+    let element = document.getElementById(languageId);
+    element.parentNode.removeChild(element);
 }
