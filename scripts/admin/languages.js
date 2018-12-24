@@ -2,9 +2,18 @@ displayLanguages = async () => {
     console.log('allo');
     const request = 'http://127.0.0.1:4000/languages';
     const response = await fetch(request);
-    const myJson = await response.json(); //extract JSON from the http response
+    const languages = await response.json(); //extract JSON from the http response
     console.log('response');
-    console.log(myJson);
+    console.log(languages);
+
+
+    languages.forEach(language => {
+        let node = document.createElement("LI");                 // Create a <li> node
+        let textnode = document.createTextNode(language.name);   // Create a text node
+        node.setAttribute('data-key', language._id);             // Append key attribute to the <li> node 
+        node.appendChild(textnode);                              // Append the text to <li>
+        document.getElementById("langList").appendChild(node);   // Append <li> to <ul> with id="langList" 
+    });
 }
 
 insertLanguage = () => {
@@ -29,7 +38,7 @@ insertLanguage = () => {
         fetch('http://127.0.0.1:4000/languages', { // the URI
             method: 'POST', // the method
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({"name": languageLabel}) // the body
+            body: JSON.stringify({ "name": languageLabel }) // the body
         })
             .then(response => {
                 // we received the response and print the status code
