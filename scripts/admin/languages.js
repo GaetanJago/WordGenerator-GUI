@@ -1,4 +1,4 @@
-let serverAdress = '127.0.0.1:4000';
+let serverAdress = '92.135.241.49:12345';
 
 const displayLanguages = async () => {
     console.log('allo');
