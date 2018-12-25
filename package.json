@@ -1,0 +1,24 @@
+{
+  "name": "gui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GaetanJago/WordGenerator-GUI.git"
+  },
+  "author": "JAGOREL Gaetan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GaetanJago/WordGenerator-GUI/issues"
+  },
+  "homepage": "https://github.com/GaetanJago/WordGenerator-GUI#readme",
+  "dependencies": {
+    "bootstrap": "^4.2.1",
+    "jquery": "^1.9.1",
+    "popper.js": "^1.14.6"
+  }
+}
