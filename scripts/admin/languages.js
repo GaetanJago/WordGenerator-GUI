@@ -74,19 +74,32 @@ const insertLanguageDOM = (language) => {
 
     let columnName = document.createElement('td');
     columnName.innerHTML = language.name;
-    columnName.setAttribute('class', 'w-50');
+    columnName.setAttribute('class', 'languageName w-50');
     tableRow.appendChild(columnName);
+
+
+    let columnModif = document.createElement('td');
+    columnModif.setAttribute('class', 'w-20');
+    let modifButton = document.createElement('button');
+    modifButton.innerHTML = 'Modifier';
+    modifButton.setAttribute('onclick', 'clickOnModif(\'' + language._id + '\')');
+    modifButton.setAttribute('type', 'button');
+    modifButton.setAttribute('class', 'btn btn-primary');
+    columnModif.appendChild(modifButton);
+    tableRow.appendChild(columnModif);
+
 
     let columnDelete = document.createElement('td');
     columnDelete.setAttribute('class', 'w-20');
     let delButton = document.createElement('button');
-    let textButton = document.createTextNode('Supprimer');
+    delButton.innerHTML = 'Supprimer'
     delButton.setAttribute('onclick', 'deleteLanguageBDD(\'' + language._id + '\')');
     delButton.setAttribute('type', 'button');
     delButton.setAttribute('class', 'btn btn-danger');
-    delButton.appendChild(textButton);
     columnDelete.appendChild(delButton);
     tableRow.appendChild(columnDelete);
+
+    
 
     document.getElementsByTagName('tbody')[0].appendChild(tableRow);
 }
@@ -124,4 +137,52 @@ const deleteLanguageDOM = (languageId) => {
 
     let element = document.getElementById(languageId);
     element.parentNode.removeChild(element);
+}
+
+
+const clickOnModif = (languageId) => {
+    let languageTD = document.getElementById(languageId).childNodes[1];
+    let languageName = languageTD.innerHTML;
+
+    languageTD.innerHTML = '';
+
+    let textField = document.createElement('input');
+    textField.setAttribute('type', 'text');
+    textField.setAttribute('class', 'w-50 form-control')
+    textField.value = languageName;
+
+    languageTD.appendChild(textField);
+
+    let modifColumn = document.getElementById(languageId).childNodes[2];
+    modifColumn.removeChild(modifColumn.firstChild);
+
+    let saveButton = document.createElement('button');
+    saveButton.innerHTML = 'Sauvegarder';
+    saveButton.setAttribute('onclick', 'saveChangeBDD(\'' + languageId + '\')');
+    saveButton.setAttribute('type', 'button');
+    saveButton.setAttribute('class', 'btn btn-success');
+    
+    modifColumn.appendChild(saveButton);
+
+    let deleteColumn = document.getElementById(languageId).childNodes[3];
+    deleteColumn.removeChild(deleteColumn.firstChild);
+
+    let cancelButton = document.createElement('button');
+    cancelButton.innerHTML = 'Annuler';
+    cancelButton.setAttribute('onclick', 'cancelChange(\'' + languageId + '\')');
+    cancelButton.setAttribute('type', 'button');
+    cancelButton.setAttribute('class', 'btn btn-secondary');
+
+    deleteColumn.appendChild(cancelButton);
+
+    languageTD.appendChild(textField);
+    
+}
+
+const saveChangeBDD = (languageId) => {
+
+}
+
+const cancelChange = (languageId) => {
+
 }

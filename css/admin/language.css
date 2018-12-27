@@ -18,3 +18,15 @@ button{
     margin-left: 0.5em;
     
 }
+
+.table td, .table td input{
+    text-align: center;   
+ }
+
+ .table td input{
+     margin: auto
+ }
+
+ #insertInput{
+     width: 20em;
+ }
