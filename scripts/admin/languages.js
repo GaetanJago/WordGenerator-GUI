@@ -15,7 +15,7 @@ const displayLanguages = async () => {
 }
 
 const insertLanguageBDD = () => {
-    let languageLabel = document.getElementById('languageLabel').value;
+    let languageLabel = document.getElementById('insertInput').value;
     console.log(languageLabel);
     if (languageLabel == '') {
         alert('Il faut définir un nom pour la langue');
