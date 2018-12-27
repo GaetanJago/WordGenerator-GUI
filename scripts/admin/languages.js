@@ -1,5 +1,5 @@
-let serverAdress = '92.135.241.49:12345';
-
+let serverAdress = '127.0.0.1:4000';
+let nbLanguage = 0;
 const displayLanguages = async () => {
     console.log('allo');
     const request = 'http://' + serverAdress + '/languages';
@@ -58,22 +58,37 @@ const insertLanguageBDD = () => {
 }
 
 const insertLanguageDOM = (language) => {
-    let div = document.createElement('div');
-    div.setAttribute('class', 'languageElement');
-    div.setAttribute('id', language._id);
 
-    let node = document.createElement('LI');                 // Create a <li> node
-    let textnode = document.createTextNode(language.name);   // Create a text node
-    node.setAttribute('data-key', language._id);             // Append key attribute to the <li> node 
-    node.appendChild(textnode);                              // Append the text to <li>
-    div.appendChild(node);                                   // Append <li> to <ul> with id="langList" 
+    nbLanguage++;
+    document.getElementById('nbLanguage').innerHTML = nbLanguage;
 
+
+
+    let tableRow = document.createElement('tr');
+    tableRow.setAttribute('id', language._id);
+
+    let columnNb = document.createElement('th');
+    columnNb.innerHTML = nbLanguage;
+    columnNb.setAttribute('class', 'w-10');
+    tableRow.appendChild(columnNb);
+
+    let columnName = document.createElement('td');
+    columnName.innerHTML = language.name;
+    columnName.setAttribute('class', 'w-50');
+    tableRow.appendChild(columnName);
+
+    let columnDelete = document.createElement('td');
+    columnDelete.setAttribute('class', 'w-20');
     let delButton = document.createElement('button');
     let textButton = document.createTextNode('Supprimer');
     delButton.setAttribute('onclick', 'deleteLanguageBDD(\'' + language._id + '\')');
+    delButton.setAttribute('type', 'button');
+    delButton.setAttribute('class', 'btn btn-danger');
     delButton.appendChild(textButton);
-    div.appendChild(delButton);
-    document.getElementById("langList").appendChild(div);
+    columnDelete.appendChild(delButton);
+    tableRow.appendChild(columnDelete);
+
+    document.getElementsByTagName('tbody')[0].appendChild(tableRow);
 }
 
 const deleteLanguageBDD = (languageId) => {
@@ -103,6 +118,10 @@ const deleteLanguageBDD = (languageId) => {
 }
 
 const deleteLanguageDOM = (languageId) => {
+
+    nbLanguage--;
+    document.getElementById('nbLanguage').innerHTML = nbLanguage;
+
     let element = document.getElementById(languageId);
     element.parentNode.removeChild(element);
 }
