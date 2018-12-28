@@ -1,5 +1,7 @@
 let serverAdress = 'Serveurgadjo:12345';
 let nbLanguage = 0;
+let backupTR;
+let editingLanguage = false;
 const displayLanguages = async () => {
     console.log('allo');
     const request = 'http://' + serverAdress + '/languages';
@@ -37,7 +39,7 @@ const insertLanguageBDD = () => {
             body: JSON.stringify({ "name": languageLabel }) // the body
         })
             .then(response => {
-                if(response.ok){
+                if (response.ok) {
                     success = true;
                 }
                 // we received the response and print the status code
@@ -47,7 +49,7 @@ const insertLanguageBDD = () => {
             })
             .then(json => {
                 // print the JSON
-                if(success){
+                if (success) {
                     insertLanguageDOM(json);
                 }
                 console.log(json)
@@ -99,7 +101,7 @@ const insertLanguageDOM = (language) => {
     columnDelete.appendChild(delButton);
     tableRow.appendChild(columnDelete);
 
-    
+
 
     document.getElementsByTagName('tbody')[0].appendChild(tableRow);
 }
@@ -111,7 +113,7 @@ const deleteLanguageBDD = (languageId) => {
     fetch('http://' + serverAdress + '/languages/' + languageId, { // the URI
         method: 'DELETE', // the method
     }).then(response => {
-        if(response.ok){
+        if (response.ok) {
             success = true;
         }
         // we received the response and print the status code
@@ -121,13 +123,13 @@ const deleteLanguageBDD = (languageId) => {
     })
         .then(json => {
 
-            if(success){
+            if (success) {
                 deleteLanguageDOM(json._id);
             }
             // print the JSON
             console.log(json)
         })
-        
+
 }
 
 const deleteLanguageDOM = (languageId) => {
@@ -141,48 +143,98 @@ const deleteLanguageDOM = (languageId) => {
 
 
 const clickOnModif = (languageId) => {
-    let languageTD = document.getElementById(languageId).childNodes[1];
-    let languageName = languageTD.innerHTML;
 
-    languageTD.innerHTML = '';
+    if (editingLanguage == false) {
+        editingLanguage = true;
+        backupTR = document.getElementById(languageId).innerHTML;
 
-    let textField = document.createElement('input');
-    textField.setAttribute('type', 'text');
-    textField.setAttribute('class', 'w-50 form-control')
-    textField.value = languageName;
+        let languageTD = document.getElementById(languageId).childNodes[1];
+        let languageName = languageTD.innerHTML;
 
-    languageTD.appendChild(textField);
+        languageTD.innerHTML = '';
 
-    let modifColumn = document.getElementById(languageId).childNodes[2];
-    modifColumn.removeChild(modifColumn.firstChild);
+        let textField = document.createElement('input');
+        textField.id = 'tfModif';
+        textField.setAttribute('type', 'text');
+        textField.setAttribute('class', 'w-50 form-control')
+        textField.value = languageName;
 
-    let saveButton = document.createElement('button');
-    saveButton.innerHTML = 'Sauvegarder';
-    saveButton.setAttribute('onclick', 'saveChangeBDD(\'' + languageId + '\')');
-    saveButton.setAttribute('type', 'button');
-    saveButton.setAttribute('class', 'btn btn-success');
-    
-    modifColumn.appendChild(saveButton);
+        languageTD.appendChild(textField);
 
-    let deleteColumn = document.getElementById(languageId).childNodes[3];
-    deleteColumn.removeChild(deleteColumn.firstChild);
+        let modifColumn = document.getElementById(languageId).childNodes[2];
+        modifColumn.removeChild(modifColumn.firstChild);
 
-    let cancelButton = document.createElement('button');
-    cancelButton.innerHTML = 'Annuler';
-    cancelButton.setAttribute('onclick', 'cancelChange(\'' + languageId + '\')');
-    cancelButton.setAttribute('type', 'button');
-    cancelButton.setAttribute('class', 'btn btn-secondary');
+        let saveButton = document.createElement('button');
+        saveButton.innerHTML = 'Sauvegarder';
+        saveButton.setAttribute('onclick', 'updateLanguageBDD(\'' + languageId + '\')');
+        saveButton.setAttribute('type', 'button');
+        saveButton.setAttribute('class', 'btn btn-success');
 
-    deleteColumn.appendChild(cancelButton);
+        modifColumn.appendChild(saveButton);
 
-    languageTD.appendChild(textField);
-    
+        let deleteColumn = document.getElementById(languageId).childNodes[3];
+        deleteColumn.removeChild(deleteColumn.firstChild);
+
+        let cancelButton = document.createElement('button');
+        cancelButton.innerHTML = 'Annuler';
+        cancelButton.setAttribute('onclick', 'cancelChange(\'' + languageId + '\')');
+        cancelButton.setAttribute('type', 'button');
+        cancelButton.setAttribute('class', 'btn btn-secondary');
+
+        deleteColumn.appendChild(cancelButton);
+
+        languageTD.appendChild(textField);
+    }
+
+
 }
 
-const saveChangeBDD = (languageId) => {
+const updateLanguageBDD = (languageId) => {
 
+    let languageLabel = document.getElementById('tfModif').value;
+    console.log(languageLabel);
+    if (languageLabel == '') {
+        alert('Il faut définir un nom pour la langue');
+    } else {
+
+        let success = false;
+
+        fetch('http://' + serverAdress + '/languages/' + languageId, { // the URI
+            method: 'PUT', // the method
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "name": languageLabel }) // the body
+        })
+            .then(response => {
+                if (response.ok) {
+                    success = true;
+                }
+                // we received the response and print the status code
+                console.log(response.status)
+                // return response body as JSON
+                return response.json()
+            })
+            .then(json => {
+                // print the JSON
+                if (success) {
+                    updateLanguageDOM(json._id, languageLabel);
+                }
+                console.log(json)
+            })
+
+    }
+
+
+}
+
+const updateLanguageDOM = (languageId, newNameLanguage) => {
+    editingLanguage = false;
+
+    document.getElementById(languageId).innerHTML = backupTR;
+    document.getElementById(languageId).childNodes[1].innerHTML = newNameLanguage;
 }
 
 const cancelChange = (languageId) => {
-
+    editingLanguage = false;
+    
+    document.getElementById(languageId).innerHTML = backupTR;
 }
