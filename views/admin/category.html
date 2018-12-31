@@ -7,11 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css"></link>
     <link rel="stylesheet" href="../../css/admin/language.css"></link>
-    <script type="text/javascript" src="../../scripts/admin/language.js"></script>
-    <title>Langues</title>
+    <script type="text/javascript" src="../../scripts/admin/category.js"></script>
+    <title>Catégories</title>
+
 </head>
 
-<body onload="displayLanguages()">
+<body onload="displayCategories()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
@@ -23,18 +24,18 @@
       </nav>
 
       <div class="jumbotron">
-        <h1 class="display-4">Langue</h1>
-        <p class="lead">Page d'administration pour la gestion des langues dans la base de données</p>
+        <h1 class="display-4">Catégorie</h1>
+        <p class="lead">Page d'administration pour la gestion des catégories dans la base de données</p>
         <hr class="my-4">
-        <h2 class="display-6">Ajouter une langue</h2>
+        <h2 class="display-6">Ajouter une catégorie</h2>
         <div class="row">
-            <input id="insertInput" type="text" class="form-control" placeholder="Nom de la langue">
-            <button type="button" class="btn btn-success" onclick="insertLanguageBDD()">Insérer</button>
+            <input id="insertInput" type="text" class="form-control" placeholder="Nom de la catégorie">
+            <button type="button" class="btn btn-success" onclick="insertCategoryBDD()">Insérer</button>
         </div>
         <hr class="my-4">
         <div>
-            <h2>Liste des langues</h2>
-            <p><span id="nbLanguage">0</span> langue(s) enregistrée(s)</p>
+            <h2>Liste des catégories</h2>
+            <p><span id="nbCategory">0</span> Catégorie(s) enregistrée(s)</p>
             <table class="table">
               <tbody>
               </tbody>

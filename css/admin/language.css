@@ -19,6 +19,10 @@ button{
     
 }
 
+.table{
+    width: 35%
+}
+
 .table td, .table td input{
     text-align: center;   
  }

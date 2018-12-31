@@ -1,42 +1,36 @@
 let serverAdress = 'Serveurgadjo:12345';
-let nbLanguage = 0;
+let nbCategory = 0;
 let backupTR;
-let editingLanguage = false;
-const displayLanguages = async () => {
-    console.log('allo');
-    const request = 'http://' + serverAdress + '/languages';
+let editingCategory = false;
+
+
+const displayCategories = async () => {
+    const request = 'http://' + serverAdress + '/categories';
     const response = await fetch(request);
-    const languages = await response.json(); //extract JSON from the http response
-    console.log('response');
-    console.log(languages);
+    const categories = await response.json(); //extract JSON from the http response
 
 
-    languages.forEach(language => {
-        insertLanguageDOM(language);
+    categories.forEach(category => {
+        insertCategoryDOM(category);
     });
 }
 
-const insertLanguageBDD = () => {
-    let languageLabel = document.getElementById('insertInput').value;
-    console.log(languageLabel);
-    if (languageLabel == '') {
+
+const insertCategoryBDD = () => {
+
+    let categoryLabel = document.getElementById('insertInput').value;
+
+    if (categoryLabel == '') {
         alert('Il faut définir un nom pour la langue');
     } else {
-        console.log(JSON.stringify({ "name": languageLabel }));
-
-        /*let xhttp = new XMLHttpRequest();
-
-        xhttp.open("POST", "http://127.0.0.1:4000/languages", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("name="+ languageLabel);*/
-
+        console.log(JSON.stringify({ "name": categoryLabel }));
 
         let success = false;
 
-        fetch('http://' + serverAdress + '/languages', { // the URI
+        fetch('http://' + serverAdress + '/categories', { // the URI
             method: 'POST', // the method
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "name": languageLabel }) // the body
+            body: JSON.stringify({ "name": categoryLabel }) // the body
         })
             .then(response => {
                 if (response.ok) {
@@ -50,7 +44,7 @@ const insertLanguageBDD = () => {
             .then(json => {
                 // print the JSON
                 if (success) {
-                    insertLanguageDOM(json);
+                    insertCategoryDOM(json);
                 }
                 console.log(json)
             })
@@ -59,32 +53,32 @@ const insertLanguageBDD = () => {
     }
 }
 
-const insertLanguageDOM = (language) => {
 
-    nbLanguage++;
-    document.getElementById('nbLanguage').innerHTML = nbLanguage;
+
+const insertCategoryDOM = (category) => {
+
+    nbCategory++;
+    document.getElementById('nbCategory').innerHTML = nbCategory;
 
 
 
     let tableRow = document.createElement('tr');
-    tableRow.setAttribute('id', language._id);
+    tableRow.setAttribute('id', category._id);
 
     let columnNb = document.createElement('th');
-    columnNb.innerHTML = nbLanguage;
-    columnNb.setAttribute('class', 'w-10');
+    columnNb.innerHTML = nbCategory;
     tableRow.appendChild(columnNb);
 
     let columnName = document.createElement('td');
-    columnName.innerHTML = language.name;
-    columnName.setAttribute('class', 'languageName w-50');
+    columnName.innerHTML = category.name;
+    columnName.setAttribute('class', 'categoryName w-50');
     tableRow.appendChild(columnName);
 
 
     let columnModif = document.createElement('td');
-    columnModif.setAttribute('class', 'w-20');
     let modifButton = document.createElement('button');
     modifButton.innerHTML = 'Modifier';
-    modifButton.setAttribute('onclick', 'clickOnModif(\'' + language._id + '\')');
+    modifButton.setAttribute('onclick', 'clickOnModif(\'' + category._id + '\')');
     modifButton.setAttribute('type', 'button');
     modifButton.setAttribute('class', 'btn btn-primary');
     columnModif.appendChild(modifButton);
@@ -92,10 +86,9 @@ const insertLanguageDOM = (language) => {
 
 
     let columnDelete = document.createElement('td');
-    columnDelete.setAttribute('class', 'w-20');
     let delButton = document.createElement('button');
     delButton.innerHTML = 'Supprimer'
-    delButton.setAttribute('onclick', 'deleteLanguageBDD(\'' + language._id + '\')');
+    delButton.setAttribute('onclick', 'deleteCategoryBDD(\'' + category._id + '\')');
     delButton.setAttribute('type', 'button');
     delButton.setAttribute('class', 'btn btn-danger');
     columnDelete.appendChild(delButton);
@@ -106,11 +99,12 @@ const insertLanguageDOM = (language) => {
     document.getElementsByTagName('tbody')[0].appendChild(tableRow);
 }
 
-const deleteLanguageBDD = (languageId) => {
+
+const deleteCategoryBDD = (categoryId) => {
 
     let success = false;
 
-    fetch('http://' + serverAdress + '/languages/' + languageId, { // the URI
+    fetch('http://' + serverAdress + '/categories/' + categoryId, { // the URI
         method: 'DELETE', // the method
     }).then(response => {
         if (response.ok) {
@@ -123,8 +117,10 @@ const deleteLanguageBDD = (languageId) => {
     })
         .then(json => {
 
+            
             if (success) {
-                deleteLanguageDOM(json._id);
+                
+                deleteCategoryDOM(json._id);
             }
             // print the JSON
             console.log(json)
@@ -132,77 +128,81 @@ const deleteLanguageBDD = (languageId) => {
 
 }
 
-const deleteLanguageDOM = (languageId) => {
+const deleteCategoryDOM = (categoryId) => {
 
-    nbLanguage--;
-    document.getElementById('nbLanguage').innerHTML = nbLanguage;
+    
+    nbCategory--;
+    document.getElementById('nbCategory').innerHTML = nbCategory;
 
-    let element = document.getElementById(languageId);
+    let element = document.getElementById(categoryId);
+
+    console.log(element);
     element.parentNode.removeChild(element);
 }
 
 
-const clickOnModif = (languageId) => {
 
-    if (editingLanguage == false) {
-        editingLanguage = true;
-        backupTR = document.getElementById(languageId).innerHTML;
+const clickOnModif = (categoryId) => {
 
-        let languageTD = document.getElementById(languageId).childNodes[1];
-        let languageName = languageTD.innerHTML;
+    if (editingCategory == false) {
+        editingCategory = true;
+        backupTR = document.getElementById(categoryId).innerHTML;
 
-        languageTD.innerHTML = '';
+        let categoryTD = document.getElementById(categoryId).childNodes[1];
+        let categoryName = categoryTD.innerHTML;
+
+        categoryTD.innerHTML = '';
 
         let textField = document.createElement('input');
         textField.id = 'tfModif';
         textField.setAttribute('type', 'text');
         textField.setAttribute('class', 'w-50 form-control')
-        textField.value = languageName;
+        textField.value = categoryName;
 
-        languageTD.appendChild(textField);
+        categoryTD.appendChild(textField);
 
-        let modifColumn = document.getElementById(languageId).childNodes[2];
+        let modifColumn = document.getElementById(categoryId).childNodes[2];
         modifColumn.removeChild(modifColumn.firstChild);
 
         let saveButton = document.createElement('button');
         saveButton.innerHTML = 'Sauvegarder';
-        saveButton.setAttribute('onclick', 'updateLanguageBDD(\'' + languageId + '\')');
+        saveButton.setAttribute('onclick', 'updateCategoryBDD(\'' + categoryId + '\')');
         saveButton.setAttribute('type', 'button');
         saveButton.setAttribute('class', 'btn btn-success');
 
         modifColumn.appendChild(saveButton);
 
-        let deleteColumn = document.getElementById(languageId).childNodes[3];
+        let deleteColumn = document.getElementById(categoryId).childNodes[3];
         deleteColumn.removeChild(deleteColumn.firstChild);
 
         let cancelButton = document.createElement('button');
         cancelButton.innerHTML = 'Annuler';
-        cancelButton.setAttribute('onclick', 'cancelChange(\'' + languageId + '\')');
+        cancelButton.setAttribute('onclick', 'cancelChange(\'' + categoryId + '\')');
         cancelButton.setAttribute('type', 'button');
         cancelButton.setAttribute('class', 'btn btn-secondary');
 
         deleteColumn.appendChild(cancelButton);
 
-        languageTD.appendChild(textField);
+        categoryTD.appendChild(textField);
     }
-
 
 }
 
-const updateLanguageBDD = (languageId) => {
 
-    let languageLabel = document.getElementById('tfModif').value;
-    console.log(languageLabel);
-    if (languageLabel == '') {
+const updateCategoryBDD = (categoryId) => {
+
+    let categoryLabel = document.getElementById('tfModif').value;
+    console.log(categoryLabel);
+    if (categoryLabel == '') {
         alert('Il faut définir un nom pour la langue');
     } else {
 
         let success = false;
 
-        fetch('http://' + serverAdress + '/languages/' + languageId, { // the URI
+        fetch('http://' + serverAdress + '/categories/' + categoryId, { // the URI
             method: 'PUT', // the method
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "name": languageLabel }) // the body
+            body: JSON.stringify({ "name": categoryLabel }) // the body
         })
             .then(response => {
                 if (response.ok) {
@@ -216,7 +216,7 @@ const updateLanguageBDD = (languageId) => {
             .then(json => {
                 // print the JSON
                 if (success) {
-                    updateLanguageDOM(json._id, languageLabel);
+                    updateCategoryDOM(json._id, categoryLabel);
                 }
                 console.log(json)
             })
@@ -226,15 +226,16 @@ const updateLanguageBDD = (languageId) => {
 
 }
 
-const updateLanguageDOM = (languageId, newNameLanguage) => {
-    editingLanguage = false;
 
-    document.getElementById(languageId).innerHTML = backupTR;
-    document.getElementById(languageId).childNodes[1].innerHTML = newNameLanguage;
+const updateCategoryDOM = (categoryId, newNameCategory) => {
+    editingCategory = false;
+
+    document.getElementById(categoryId).innerHTML = backupTR;
+    document.getElementById(categoryId).childNodes[1].innerHTML = newNameCategory;
 }
 
-const cancelChange = (languageId) => {
-    editingLanguage = false;
-    
-    document.getElementById(languageId).innerHTML = backupTR;
+const cancelChange = (categoryId) => {
+    editingCategory = false;
+
+    document.getElementById(categoryId).innerHTML = backupTR;
 }
