@@ -1,7 +1,10 @@
 let serverAdress = 'Serveurgadjo:12345';
+//let serverAdress = '86.214.146.126:12345';
 let nbLanguage = 0;
 let backupTR;
 let editingLanguage = false;
+
+
 const displayLanguages = async () => {
     console.log('allo');
     const request = 'http://' + serverAdress + '/languages';

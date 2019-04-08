@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/GaetanJago/WordGenerator-GUI#readme",
   "dependencies": {
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "jquery": "^3.3.1",
-    "popper.js": "^1.14.6"
+    "popper.js": "^1.15.0"
   }
 }
